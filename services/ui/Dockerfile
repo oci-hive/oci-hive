@@ -5,7 +5,10 @@ WORKDIR /var/www/html
 RUN apk update && \
     apk add --no-cache \
         git \
+        vim \
         ca-certificates \
         bash \
         nodejs \
-        npm
+        npm && \
+    echo 'alias ll="ls -hlaF"' >> ~/.bashrc && \
+    echo 'alias vi="vim"' >> ~/.bashrc

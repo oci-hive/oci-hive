@@ -16,9 +16,10 @@ services:
     container_name: registry-ui
     restart: always
     ports:
-      - 8080:80
+      - 8080:8080
     volumes:
       - ./services/ui/src:/var/www/html
+      - ui-go-packages:/go/pkg/mod/
     tty: true
     stdin_open: true
     depends_on:
@@ -28,6 +29,8 @@ services:
 
 volumes:
   registry-vol:
+    driver: local
+  ui-go-packages:
     driver: local
 
 networks:
