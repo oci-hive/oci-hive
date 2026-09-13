@@ -22,19 +22,19 @@ func main() {
 		FileWatcher: true,
 	})
 
-	http.HandleFunc("/", homeHandler)
+	http.HandleFunc("/", reposHandler)
 	http.HandleFunc("/tags/{name}", tagsHandler)
 	http.ListenAndServe(":8080", nil)
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
+func reposHandler(w http.ResponseWriter, r *http.Request) {
 	resp, err := fetchRepositories()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	fail := tpl.Response(w, "views/home", map[string]any{
-		"title": "Home page",
+	fail := tpl.Response(w, "views/repos", map[string]any{
+		"title": "Repositories",
 		"repos": resp.Repositories,
 	})
 
