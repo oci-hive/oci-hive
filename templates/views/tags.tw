@@ -1,0 +1,13 @@
+@use('~main')
+
+@insert('title', 'Tags of ' + name)
+
+@insert('content')
+    <h1>Tags of {{ name }}</h1>
+    <h4>{{ tags.len() }} tag{{ tags.len() == 1 ? '' : 's' }}</h4>
+    <ul>
+        @each(tag in tags)
+            <li>{{ tag }}</li>
+        @end
+    </ul>
+@end

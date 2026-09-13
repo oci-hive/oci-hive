@@ -1,0 +1,12 @@
+@use('~main')
+
+@insert('title', title)
+
+@insert('content')
+    <h1>Repositories</h1>
+    <ul>
+        @each(repo in repos)
+            <li><a href="/tags/{{ repo }}">{{ repo }}</a></li>
+        @end
+    </ul>
+@end

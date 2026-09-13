@@ -1,7 +1,0 @@
-@use('~main')
-
-@insert('title', title)
-
-@insert('content')
-    <h1>Home page</h1>
-@end
