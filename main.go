@@ -28,7 +28,8 @@ func main() {
 }
 
 func reposHandler(w http.ResponseWriter, r *http.Request) {
-	resp, err := fetchRepositories()
+	url := host + "/v2/_catalog?n=1000"
+	resp, err := fetch[RepositoriesResponse](url, http.MethodGet)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -44,7 +45,8 @@ func reposHandler(w http.ResponseWriter, r *http.Request) {
 func tagsHandler(w http.ResponseWriter, r *http.Request) {
 	name := r.PathValue("name")
 
-	resp, err := fetchTags(name)
+	url := fmt.Sprintf("%s/v2/%s/tags/list", host, name)
+	resp, err := fetch[TagsResponse](url, http.MethodGet)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -66,15 +68,13 @@ type TagsResponse struct {
 	Tags []string `json:"tags"`
 }
 
-func fetchRepositories() (*RepositoriesResponse, error) {
-	url := host + "/v2/_catalog?n=1000"
-
+func fetch[T any](url, method string) (*T, error) {
 	// Create a context with timeout (prevents hanging requests)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	// Build the request
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	req, err := http.NewRequestWithContext(ctx, method, url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("request error: %s", err)
 	}
@@ -95,46 +95,7 @@ func fetchRepositories() (*RepositoriesResponse, error) {
 		return nil, fmt.Errorf("unexpected status %d: %s\n", resp.StatusCode, body)
 	}
 
-	var result RepositoriesResponse
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return nil, fmt.Errorf("decode error: %s", err)
-	}
-
-	defer resp.Body.Close()
-
-	return &result, nil
-}
-
-func fetchTags(name string) (*TagsResponse, error) {
-	url := host + fmt.Sprintf("/v2/%s/tags/list", name)
-
-	// Create a context with timeout (prevents hanging requests)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	// Build the request
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		return nil, fmt.Errorf("request error: %s", err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-
-	// Use a custom client with timeout
-	client := &http.Client{Timeout: 10 * time.Second}
-
-	// Execute the request
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("do error: %s", err)
-	}
-
-	// Handle non-2xx status
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		body, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("unexpected status %d: %s\n", resp.StatusCode, body)
-	}
-
-	var result TagsResponse
+	var result T
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return nil, fmt.Errorf("decode error: %s", err)
 	}
