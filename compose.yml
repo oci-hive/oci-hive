@@ -1,0 +1,35 @@
+services:
+  registry:
+    image: docker.io/library/registry:2.8.2
+    container_name: registry
+    restart: always
+    volumes:
+      - registry-vol:/var/lib/registry
+      - ./services/registry/config.yml:/etc/docker/registry/config.yml
+    networks:
+      - registry-net
+
+  ui:
+    image: registry.serhiicho.com/registry-hub:ui
+    build:
+      dockerfile: services/ui/Dockerfile
+    container_name: registry-ui
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - ./services/ui/src:/var/www/html
+    tty: true
+    stdin_open: true
+    depends_on:
+      - registry
+    networks:
+      - registry-net
+
+volumes:
+  registry-vol:
+    driver: local
+
+networks:
+  registry-net:
+    driver: bridge
