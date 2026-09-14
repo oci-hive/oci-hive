@@ -3,10 +3,11 @@
 @insert('title', title)
 
 @insert('content')
-    <h1>Repositories</h1>
-    <ul>
+    <h1 class="text-2xl">{{ repos.len() }} repositories</h1>
+
+    <div class="mt-5 grid grid-cols-4 gap-4">
         @each(repo in repos)
-            <li><a href="/tags/{{ repo }}">{{ repo }}</a></li>
+            @component('~repo', { repo })@end
         @end
-    </ul>
+    </div>
 @end

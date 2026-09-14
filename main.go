@@ -22,6 +22,9 @@ func main() {
 		FileWatcher: true,
 	})
 
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
 	http.HandleFunc("/", reposHandler)
 	http.HandleFunc("/tags/{name}", tagsHandler)
 	http.ListenAndServe(":8080", nil)
