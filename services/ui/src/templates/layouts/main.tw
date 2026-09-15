@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @component('~partials/head')@end
+</head>
+<body>
+    @component('~navbar')@end
+
+    <div class="container mx-auto mt-3">
+        @reserve("content")
+    </div>
+</body>
+</html>

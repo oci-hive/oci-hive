@@ -7,20 +7,35 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"codeberg.org/textwire/textwire/v5"
 	"codeberg.org/textwire/textwire/v5/config"
 )
 
+var Env = "development"
+
 var tpl *textwire.Template
 var host = "https://registry.serhiicho.com/"
 
 func main() {
-	tpl, _ = textwire.NewTemplate(&config.Config{
-		DebugMode:   true,
-		FileWatcher: true,
-	})
+	isDev := os.Getenv("APP_ENV") == "development"
+
+	twConf := &config.Config{
+		DebugMode:     isDev,
+		FileWatcher:   isDev,
+		ErrorPagePath: "error-page",
+		GlobalData: map[string]any{
+			"env": Env,
+			"manifest": map[string]string{
+				"js":  "/static/css/style.css",
+				"css": "/static/js/script.js",
+			},
+		},
+	}
+
+	tpl, _ = textwire.NewTemplate(twConf)
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))

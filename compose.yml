@@ -8,9 +8,31 @@ services:
     volumes:
       - registry-vol:/var/lib/registry
       - ./services/registry/config.yml:/etc/docker/registry/config.yml
+    networks:
+      - registry-net
+
+  ui:
+    image: registry.serhiicho.com/registry-hub:ui
+    build:
+      dockerfile: services/ui/Dockerfile
+    container_name: registry-ui
+    restart: always
+    ports:
+      - 8080:8080
+    volumes:
+      - ./services/ui/src:/var/www/html
+      - ui-go-packages:/go/pkg/mod/
+    tty: true
+    stdin_open: true
+    depends_on:
+      - registry
+    networks:
+      - registry-net
 
 volumes:
   registry-vol:
+    driver: local
+  ui-go-packages:
     driver: local
 
 networks:
