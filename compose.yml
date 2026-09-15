@@ -1,21 +1,19 @@
 services:
   registry:
     image: docker.io/library/registry:2.8.2
-    container_name: registry
+    container_name: oci-hive-registry
     restart: always
     ports:
       - 5000:5000
     volumes:
       - registry-vol:/var/lib/registry
       - ./services/registry/config.yml:/etc/docker/registry/config.yml
-    networks:
-      - registry-net
 
   ui:
     image: registry.serhiicho.com/registry-hub:ui
     build:
       dockerfile: services/ui/Dockerfile
-    container_name: registry-ui
+    container_name: oci-hive-ui
     restart: always
     ports:
       - 8080:8080
@@ -26,15 +24,25 @@ services:
     stdin_open: true
     depends_on:
       - registry
-    networks:
-      - registry-net
+
+  go-dev:
+    image: registry.serhiicho.com/go-lsp:1.27-alpine
+    container_name: oci-hive-go-dev
+    working_dir: ${PWD}/services/ui/src
+    volumes:
+      - ./services/ui/src:${PWD}/services/ui/src:z
+      - go-dev-mod:/go/pkg/mod
+      - go-dev-cache:/root/.cache/go-build
+    command: ["sleep", "infinity"]
+    tty: true
+    stdin_open: true
 
 volumes:
   registry-vol:
     driver: local
   ui-go-packages:
     driver: local
-
-networks:
-  registry-net:
-    driver: bridge
+  go-dev-mod:
+    driver: local
+  go-dev-cache:
+    driver: local
