@@ -17,7 +17,7 @@ import (
 var Env = "development"
 
 var tpl *textwire.Template
-var host = "https://registry.serhiicho.com/"
+var host = "http://registry:5000"
 
 func main() {
 	isDev := os.Getenv("APP_ENV") == "development"
