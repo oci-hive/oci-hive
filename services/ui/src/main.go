@@ -27,18 +27,17 @@ func main() {
 		FileWatcher:   isDev,
 		ErrorPagePath: "error-page",
 		GlobalData: map[string]any{
-			"env": Env,
-			"manifest": map[string]string{
-				"js":  "/static/css/style.css",
-				"css": "/static/js/script.js",
-			},
+			"isDev": isDev,
 		},
 	}
 
-	tpl, _ = textwire.NewTemplate(twConf)
+	t, err := textwire.NewTemplate(twConf)
+	if err != nil {
+		fmt.Println(err)
+	}
+	tpl = t
 
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	http.HandleFunc("/", reposHandler)
 	http.HandleFunc("/tags/{name}", tagsHandler)

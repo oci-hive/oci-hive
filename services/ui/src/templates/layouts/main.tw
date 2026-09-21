@@ -1,7 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @component('~partials/head')@end
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Serhii Cho">
+<meta name="description" content="@reserve('description')">
+<meta property="og:locale" content="en_US">
+<meta name="darkreader-lock">
+<link rel="icon" href="/static/img/logo.png" type="image/png" sizes="50x50" />
+<title>@reserve('title')</title>
+
+@if(global.isDev)
+    <script type="module" src="http://localhost:5173/@vite/client"></script>
+    <script type="module" src="http://localhost:5173/src/js/main.ts"></script>
+@else
+    <script type="module" src="/static/build/main.js"></script>
+    <link rel="stylesheet" href="/static/build/main.css">
+@end
 </head>
 <body>
     @component('~navbar')@end

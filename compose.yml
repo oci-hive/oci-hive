@@ -15,8 +15,11 @@ services:
       dockerfile: services/ui/Dockerfile
     container_name: oci-hive-ui
     restart: always
+    environment:
+      APP_ENV: $APP_ENV
     ports:
       - 8080:8080
+      - 5173:5173
     volumes:
       - ./services/ui/src:/var/www/html
       - ui-go-packages:/go/pkg/mod/

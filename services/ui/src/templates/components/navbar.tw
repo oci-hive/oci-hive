@@ -1,5 +1,5 @@
 <nav class="bg-slate-900 text-white py-3 px-2">
     <div class="container mx-auto">
-        <span>OCI Registry</span>
+        <a href="/" class="transition-opacity">OCI Registry</a>
     </div>
 </nav>

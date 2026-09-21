@@ -1,1 +1,10 @@
 @import "tailwindcss";
+@import './_variables.css';
+
+@source "../../templates/**/*.tw";
+
+@theme {
+    --color-border: var(--color-border);
+    --color-page: var(--color-page);
+    --color-page-hover: var(--color-page-hover);
+}

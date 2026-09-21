@@ -5,9 +5,18 @@
 @insert('content')
     <h1 class="text-2xl">{{ repos.len() }} repositories</h1>
 
-    <div class="mt-5 grid grid-cols-4 gap-4">
-        @each(repo in repos)
-            @component('~repo', { repo })@end
-        @end
-    </div>
+    <table class="mt-5 table-auto w-full">
+        <thead>
+            <tr class="border-b border-border">
+                <td class="py-2 px-3">Name</td>
+                <td class="py-2 px-3 max-w-5">Last Pushed</td>
+                <td class="py-2 px-3 max-w-5">Visibility</td>
+            </tr>
+        </thead>
+        <tbody>
+            @each(repo in repos)
+                @component('~repo', { repo })@end
+            @end
+        </tbody>
+    </table>
 @end

@@ -1,1 +1,2 @@
-console.log('Hello')
+// @ts-ignore
+import '../css/main.css'

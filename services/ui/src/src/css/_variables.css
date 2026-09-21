@@ -1,0 +1,9 @@
+:root {
+    --color-border: #0000001a;
+    --color-page: white;
+    --color-page-hover: #f2f2f2;
+}
+
+.dark {
+    --color-border: #ffffff1a;
+}

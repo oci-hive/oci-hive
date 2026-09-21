@@ -11,17 +11,17 @@
     "type": "commonjs",
     "main": "webpack.mix.js",
     "scripts": {
-        "dev": "npm run development",
-        "development": "mix",
-        "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "dev": "vite --host",
+        "build": "vite build",
         "prettier": "prettier ./src --write",
         "prettier-check": "prettier ./src --check",
-        "hot": "mix watch --hot",
-        "prod": "npm run production",
-        "production": "mix --production"
+        "test": "vitest",
+        "check": "vue-tsc --noEmit",
+        "all": "npm run check && npm run prettier && npm run test run",
+        "check-updates": "npm-check-updates",
+        "do-updates": "npm-check-updates -u"
     },
-    "dependencies": {
+    "devDependencies": {
         "@tailwindcss/vite": "^4.3.3",
         "tailwindcss": "^4.3.3",
         "vite": "^8.3.0"
