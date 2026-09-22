@@ -2,8 +2,12 @@
     --color-border: #0000001a;
     --color-page: white;
     --color-page-hover: #f2f2f2;
+    --color-font: black;
 }
 
 .dark {
     --color-border: #ffffff1a;
+    --color-page: #0c0f15;
+    --color-page-hover: #0a0c11;
+    --color-font: #bbb;
 }

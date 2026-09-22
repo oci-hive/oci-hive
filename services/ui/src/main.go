@@ -19,6 +19,21 @@ var Env = "development"
 var tpl *textwire.Template
 var host = "http://registry:5000"
 
+type RepositoriesResponse struct {
+	Repositories []string `json:"repositories"`
+}
+
+type ManifestResponse struct {
+	Annotations struct {
+		Arch string `json:"com.docker.official-images.bashbrew.arch,omitempty"`
+	} `json:"annotations,omitempty"`
+}
+
+type TagsResponse struct {
+	Name string   `json:"name"`
+	Tags []string `json:"tags"`
+}
+
 func main() {
 	isDev := os.Getenv("APP_ENV") == "development"
 
@@ -46,14 +61,21 @@ func main() {
 
 func reposHandler(w http.ResponseWriter, r *http.Request) {
 	url := host + "/v2/_catalog?n=1000"
-	resp, err := fetch[RepositoriesResponse](url, http.MethodGet)
+	reposResp, err := fetch[RepositoriesResponse](url, http.MethodGet)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	url = host + "/v2/registry-hub/manifests/ui"
+	manifestResp, err := fetch[ManifestResponse](url, http.MethodGet)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	fail := tpl.Response(w, "views/repos", map[string]any{
-		"title": "Repositories",
-		"repos": resp.Repositories,
+		"title":       "Repositories",
+		"repos":       reposResp.Repositories,
+		"annotations": manifestResp.Annotations,
 	})
 
 	fail.PrintOnError()
@@ -76,15 +98,6 @@ func tagsHandler(w http.ResponseWriter, r *http.Request) {
 	fail.PrintOnError()
 }
 
-type RepositoriesResponse struct {
-	Repositories []string `json:"repositories"`
-}
-
-type TagsResponse struct {
-	Name string   `json:"name"`
-	Tags []string `json:"tags"`
-}
-
 func fetch[T any](url, method string) (*T, error) {
 	// Create a context with timeout (prevents hanging requests)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -95,7 +108,9 @@ func fetch[T any](url, method string) (*T, error) {
 	if err != nil {
 		return nil, fmt.Errorf("request error: %s", err)
 	}
+
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/vnd.oci.image.manifest.v1+json")
 
 	// Use a custom client with timeout
 	client := &http.Client{Timeout: 10 * time.Second}

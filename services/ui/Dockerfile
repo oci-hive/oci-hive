@@ -8,6 +8,8 @@ RUN apk update && \
         vim \
         ca-certificates \
         bash \
+        curl \
+        jq \
         nodejs \
         npm && \
     echo 'alias ll="ls -hlaF"' >> ~/.bashrc && \

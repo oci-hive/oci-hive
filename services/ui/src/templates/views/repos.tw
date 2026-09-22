@@ -5,17 +5,20 @@
 @insert('content')
     <h1 class="text-2xl">{{ repos.len() }} repositories</h1>
 
+    @dump(annotations.camel())
     <table class="mt-5 table-auto w-full">
         <thead>
             <tr class="border-b border-border">
-                <td class="py-2 px-3">Name</td>
-                <td class="py-2 px-3 max-w-5">Last Pushed</td>
-                <td class="py-2 px-3 max-w-5">Visibility</td>
+                @each(title in ["Name", "Last Pushed", "Visibility"])
+                    <td class="py-2 px-3 {{ loop.first ? '' : 'w-40' }}">
+                        {{ title }}
+                    </td>
+                @end
             </tr>
         </thead>
         <tbody>
             @each(repo in repos)
-                @component('~repo', { repo })@end
+                @component('~repo/item', { repo })@end
             @end
         </tbody>
     </table>

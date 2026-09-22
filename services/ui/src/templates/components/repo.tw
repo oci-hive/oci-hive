@@ -1,5 +1,0 @@
-<tr class="border-b border-border cursor-pointer group">
-    <td class="transition-colors group-hover:bg-page-hover px-3 py-2">{{ repo }}</td>
-    <td class="transition-colors group-hover:bg-page-hover px-3 py-2 max-w-5">Other info</td>
-    <td class="transition-colors group-hover:bg-page-hover px-3 py-2 max-w-5">Public</td>
-</tr>
