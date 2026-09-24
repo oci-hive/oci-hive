@@ -44,7 +44,7 @@ func tagsHandler(w http.ResponseWriter, r *http.Request) {
 
 		tags = append(tags, tag{
 			Name: tagName,
-			Size: getSizeFromManifest(resp),
+			Size: getSizeFromManifest(resp, repoName),
 			Arch: getArchFromManifest(resp),
 		})
 	}
@@ -73,7 +73,7 @@ func getArchFromManifest(resp *manifestResponse) []string {
 	return []string{}
 }
 
-func getSizeFromManifest(resp *manifestResponse) string {
+func getSizeFromManifest(resp *manifestResponse, repoName string) string {
 	bytes := 0
 	for _, layer := range resp.Layers {
 		bytes += layer.Size
@@ -82,6 +82,16 @@ func getSizeFromManifest(resp *manifestResponse) string {
 	mb := bytes / (1024 * 1024)
 	if mb > 0 {
 		return fmt.Sprintf("%d MB", mb)
+	}
+
+	for _, manifest := range resp.Manifests {
+		url := fmt.Sprintf("%s/v2/%s/manifests/%s", host, repoName, manifest.Digest)
+		resp, err := fetch[manifestResponse](url, http.MethodGet)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		return getSizeFromManifest(resp, repoName)
 	}
 
 	return ""

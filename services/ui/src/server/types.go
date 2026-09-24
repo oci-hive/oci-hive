@@ -1,6 +1,7 @@
 package server
 
 type manifest struct {
+	Digest   string `json:"digest"`
 	Platform struct {
 		Arch string `json:"architecture"`
 		OS   string `json:"os"`
