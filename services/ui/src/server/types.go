@@ -13,7 +13,12 @@ type annotations struct {
 
 type tag struct {
 	Name string
+	Size string
 	Arch []string
+}
+
+type layer struct {
+	Size int `json:"size"`
 }
 
 // Response types
@@ -29,5 +34,6 @@ type tagsResponse struct {
 
 type manifestResponse struct {
 	Annotations annotations `json:"annotations"`
+	Layers      []layer     `json:"layers"`
 	Manifests   []manifest  `json:"manifests"`
 }

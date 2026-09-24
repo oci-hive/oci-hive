@@ -44,6 +44,7 @@ func tagsHandler(w http.ResponseWriter, r *http.Request) {
 
 		tags = append(tags, tag{
 			Name: tagName,
+			Size: getSizeFromManifest(resp),
 			Arch: getArchFromManifest(resp),
 		})
 	}
@@ -70,4 +71,18 @@ func getArchFromManifest(resp *manifestResponse) []string {
 	}
 
 	return []string{}
+}
+
+func getSizeFromManifest(resp *manifestResponse) string {
+	bytes := 0
+	for _, layer := range resp.Layers {
+		bytes += layer.Size
+	}
+
+	mb := bytes / (1024 * 1024)
+	if mb > 0 {
+		return fmt.Sprintf("%d MB", mb)
+	}
+
+	return ""
 }
