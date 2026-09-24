@@ -12,7 +12,7 @@ const delayHmr = (ms: number) => ({
 })
 
 export default defineConfig({
-    plugins: [tailwindcss(), delayHmr(200)],
+    plugins: [tailwindcss(), delayHmr(500)],
 
     server: {
         host: '0.0.0.0',

@@ -1,4 +1,4 @@
-package main
+package server
 
 type manifest struct {
 	Platform struct {
@@ -13,7 +13,7 @@ type annotations struct {
 
 type tag struct {
 	Name string
-	Arch string
+	Arch []string
 }
 
 // Response types

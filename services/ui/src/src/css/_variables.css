@@ -5,6 +5,7 @@
     --color-font: black;
     --color-main: var(--color-yellow-300);
     --color-main-hover: var(--color-yellow-400);
+    --color-secondary: var(--color-slate-900);
 }
 
 .dark {
@@ -14,4 +15,5 @@
     --color-font: #bbb;
     --color-main: var(--color-yellow-400);
     --color-main-hover: var(--color-yellow-500);
+    --color-secondary: var(--color-slate-900);
 }
