@@ -1,0 +1,16 @@
+<tr
+    class="{{ hasValue(trClass) ? trClass : '' }} cursor-pointer"
+    data-url="{{ defined(url) ? url : '' }}"
+>
+    @each(col in cols)
+        <td
+            class="transition-colors group-hover:bg-page-hover py-2 px-3 {{ loop.first ? '' : 'w-40' }}"
+        >
+            @if(defined(url) && loop.first)
+                <a href="{{ url }}">{{ col }}</a>
+            @else
+                {{ col }}
+            @end
+        </td>
+    @end
+</tr>

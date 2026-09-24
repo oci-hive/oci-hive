@@ -3,11 +3,13 @@
 @insert('title', 'Tags of ' + name)
 
 @insert('content')
-    <h1>Tags of {{ name }}</h1>
-    <h4>{{ tags.len() }} tag{{ tags.len() == 1 ? '' : 's' }}</h4>
-    <ul>
+    <h1 class="text-2xl">Tags of {{ name }}</h1>
+
+    @component('~table/table', { titles: ["Name", "Arch"] })
         @each(tag in tags)
-            <li>{{ tag }}</li>
+            @component('~table/row', {
+                cols: [tag.Name, tag.Arch],
+            })@end
         @end
-    </ul>
+    @end
 @end

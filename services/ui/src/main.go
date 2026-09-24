@@ -29,6 +29,11 @@ type ManifestResponse struct {
 	} `json:"annotations,omitempty"`
 }
 
+type Tag struct {
+	Name string
+	Arch string
+}
+
 type TagsResponse struct {
 	Name string   `json:"name"`
 	Tags []string `json:"tags"`
@@ -66,33 +71,41 @@ func reposHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 
-	url = host + "/v2/registry-hub/manifests/ui"
-	manifestResp, err := fetch[ManifestResponse](url, http.MethodGet)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
 	fail := tpl.Response(w, "views/repos", map[string]any{
-		"title":       "Repositories",
-		"repos":       reposResp.Repositories,
-		"annotations": manifestResp.Annotations,
+		"title": "Repositories",
+		"repos": reposResp.Repositories,
 	})
 
 	fail.PrintOnError()
 }
 
 func tagsHandler(w http.ResponseWriter, r *http.Request) {
-	name := r.PathValue("name")
+	repoName := r.PathValue("name")
 
-	url := fmt.Sprintf("%s/v2/%s/tags/list", host, name)
+	url := fmt.Sprintf("%s/v2/%s/tags/list", host, repoName)
 	resp, err := fetch[TagsResponse](url, http.MethodGet)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
+	tags := make([]Tag, 0)
+
+	for _, tagName := range resp.Tags {
+		url := fmt.Sprintf("%s/v2/%s/manifests/%s", host, repoName, tagName)
+		resp, err := fetch[ManifestResponse](url, http.MethodGet)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		tags = append(tags, Tag{
+			Name: tagName,
+			Arch: resp.Annotations.Arch,
+		})
+	}
+
 	fail := tpl.Response(w, "views/tags", map[string]any{
-		"name": name,
-		"tags": resp.Tags,
+		"name": repoName,
+		"tags": tags,
 	})
 
 	fail.PrintOnError()
