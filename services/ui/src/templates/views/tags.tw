@@ -5,11 +5,28 @@
 @insert('content')
     <h1 class="text-2xl">Tags of {{ name }}</h1>
 
-    @component('~table/table', { titles: ["Name", "Arch"] })
-        @each(tag in tags)
-            @component('~table/row', {
-                cols: [tag.Name, tag.Arch],
-            })@end
-        @end
-    @end
+    <table class="mt-5 table-auto w-full">
+        <thead>
+            <tr class="border-b border-border">
+                @each(title in ['Name', 'Arch'])
+                    <td class="py-2 px-3 {{ loop.first ? '' : 'w-40' }}">
+                        {{ title }}
+                    </td>
+                @end
+            </tr>
+        </thead>
+        <tbody>
+            @each(tag in tags)
+                <tr>
+                    @each(col in [tag.Name, tag.Arch])
+                        <td
+                            class="transition-colors group-hover:bg-page-hover py-2 px-3 {{ loop.first ? '' : 'w-40' }}"
+                        >
+                            {{ col }}
+                        </td>
+                    @end
+                </tr>
+            @end
+        </tbody>
+    </table>
 @end

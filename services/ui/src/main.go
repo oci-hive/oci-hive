@@ -17,7 +17,9 @@ import (
 var Env = "development"
 
 var tpl *textwire.Template
-var host = "http://registry:5000"
+
+// var host = "http://registry:5000"
+var host = "https://registry.serhiicho.com"
 
 type RepositoriesResponse struct {
 	Repositories []string `json:"repositories"`
@@ -25,8 +27,14 @@ type RepositoriesResponse struct {
 
 type ManifestResponse struct {
 	Annotations struct {
-		Arch string `json:"com.docker.official-images.bashbrew.arch,omitempty"`
-	} `json:"annotations,omitempty"`
+		Arch string `json:"com.docker.official-images.bashbrew.arch"`
+	} `json:"annotations"`
+	Manifests []struct {
+		Platform struct {
+			Arch string `json:"architecture"`
+			OS   string `json:"os"`
+		} `json:"platform"`
+	} `json:"manifests"`
 }
 
 type Tag struct {
@@ -123,7 +131,7 @@ func fetch[T any](url, method string) (*T, error) {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Accept", "application/vnd.oci.image.manifest.v1+json")
+	req.Header.Set("Accept", "application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.oci.image.index.v1+json, application/vnd.docker.distribution.manifest.list.v2+json")
 
 	// Use a custom client with timeout
 	client := &http.Client{Timeout: 10 * time.Second}
