@@ -1,6 +1,7 @@
 <a
     href="/tags/{{ repo }}"
     class="flex gap-3 items-center p-4 border border-main rounded-xl transition-colors hover:bg-yellow-100/10"
+    style="corner-shape: bevel"
 >
     <div>
         <img src="/static/img/logo.png" width="35" />

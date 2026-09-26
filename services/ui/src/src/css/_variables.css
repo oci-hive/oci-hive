@@ -4,7 +4,6 @@
     --color-page-hover: #f2f2f2;
     --color-font: black;
     --color-main: var(--color-yellow-300);
-    --color-main-hover: var(--color-yellow-400);
     --color-secondary: var(--color-slate-900);
 }
 
@@ -13,7 +12,6 @@
     --color-page: #0c0f15;
     --color-page-hover: #0a0c11;
     --color-font: #bbb;
-    --color-main: var(--color-yellow-400);
-    --color-main-hover: var(--color-yellow-500);
+    --color-main: var(--color-yellow-500);
     --color-secondary: var(--color-slate-900);
 }
